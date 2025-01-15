@@ -7,7 +7,7 @@ dotenv.config({ path: "/Users/youngjaekim/Desktop/Linkedin_Clone/.env" });
 
 const PORT = process.env.PORT;
 const app = express();
-app.use(express.json());
+app.use(express.json()); // parse JSON reques body
 
 // V1 = Version
 app.use("/api/v1/auth", authRoutes);

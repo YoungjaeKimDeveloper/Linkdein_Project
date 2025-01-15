@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     userName: { type: String, required: true, unique: true },
-    email: { required: true, unique: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     profilePicture: {
       type: String,
@@ -47,12 +47,17 @@ const userSchema = new mongoose.Schema(
         endYear: Number,
       },
     ],
+    // Friends
+    connections: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
-  { timestamps }
+  { timestamps: true }
 );
 
-export const User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
-required: true;
-
-// required: true, unique: true
+export default User;
