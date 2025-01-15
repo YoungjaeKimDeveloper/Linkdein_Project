@@ -74,11 +74,58 @@ export const signup = async (req, res) => {
 // Login
 export const login = async (req, res) => {
   try {
-  } catch (error) {}
+    //  사용자 정보 받아오기
+    const { email, password } = req.body;
+    // 모든 폼 확인하기
+    if (!email || !password) {
+      return res
+        .statu(400)
+        .json({ success: false, message: "Please Fill up the all Forms" });
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .statu(400)
+        .json({ success: false, message: "CANNOT FIND THE USER WITH EMAIL" });
+    }
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
+    if (!isCorrectPassword) {
+      return res
+        .statu(400)
+        .json({ success: false, message: "Invalid Password" });
+    }
+    const token = await generateToken(user._id);
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Login Successfully ✅",
+      user: {
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error(`ERROR IN LOGIN ${error.message}`);
+    return res.status(500).json({
+      success: false,
+      message: `ERROR IN LOGIN FUNCTION ❌ : ${error.message}`,
+    });
+  }
 };
 
 //   Logout
 export const logout = async (req, res) => {
   try {
-  } catch (error) {}
+    res.clearCookie("jwt");
+    return res
+      .status(200)
+      .json({ success: true, message: "USER LOGGED OUT✅" });
+  } catch (error) {
+    console.error("Failed to Logout ❌: ", error.message);
+    return res.statu(500).json({ success: false, message: "FAILED TO LOGOUT" });
+  }
 };
