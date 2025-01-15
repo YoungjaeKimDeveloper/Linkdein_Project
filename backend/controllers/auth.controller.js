@@ -79,19 +79,19 @@ export const login = async (req, res) => {
     // 모든 폼 확인하기
     if (!email || !password) {
       return res
-        .statu(400)
+        .status(400)
         .json({ success: false, message: "Please Fill up the all Forms" });
     }
     const user = await User.findOne({ email });
     if (!user) {
       return res
-        .statu(400)
+        .status(400)
         .json({ success: false, message: "CANNOT FIND THE USER WITH EMAIL" });
     }
     const isCorrectPassword = await bcrypt.compare(password, user.password);
     if (!isCorrectPassword) {
       return res
-        .statu(400)
+        .status(400)
         .json({ success: false, message: "Invalid Password" });
     }
     const token = await generateToken(user._id);
@@ -126,6 +126,22 @@ export const logout = async (req, res) => {
       .json({ success: true, message: "USER LOGGED OUT✅" });
   } catch (error) {
     console.error("Failed to Logout ❌: ", error.message);
-    return res.statu(500).json({ success: false, message: "FAILED TO LOGOUT" });
+    return res
+      .status(500)
+      .json({ success: false, message: "FAILED TO LOGOUT" });
+  }
+};
+
+// 현재 유저 정보 가져오기
+export const getCurrentUser = async (req, res) => {
+  try {
+    const currentUSer = req.user;
+    return res.status(200).json({ success: true, user: currentUSer });
+  } catch (error) {
+    console.error("FAILED TO GET USERS");
+    return res.status(500).json({
+      success: false,
+      message: `ERROR IN [getCurrentUser] ${error.message}}`,
+    });
   }
 };
