@@ -5,6 +5,8 @@ import cookieParser from "cookie-parser";
 // Routes
 import authRoutes from "./routes/auth.routes.js";
 import usersRoutes from "./routes/user.routes.js";
+import postRoutes from "./routes/post.routes.js";
+
 dotenv.config({ path: "/Users/youngjaekim/Desktop/Linkedin_Clone/.env" });
 
 const PORT = process.env.PORT;
@@ -15,6 +17,7 @@ app.use(cookieParser());
 // V1 = Version
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", usersRoutes);
+app.use("/api/v1/posts", postRoutes);
 
 app.listen(PORT, () => {
   console.info(`Server is Running In ${PORT}`);
