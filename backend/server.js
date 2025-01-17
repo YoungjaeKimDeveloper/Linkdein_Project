@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import usersRoutes from "./routes/user.routes.js";
 import postRoutes from "./routes/post.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
 
 dotenv.config({ path: "/Users/youngjaekim/Desktop/Linkedin_Clone/.env" });
 
@@ -18,6 +19,7 @@ app.use(cookieParser());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/posts", postRoutes);
+app.use("/api/v1/notification", notificationRoutes);
 
 app.listen(PORT, () => {
   console.info(`Server is Running In ${PORT}`);
